@@ -144,21 +144,50 @@ long LinuxParser::UpTime() {
   return up_time;
 }
 
-// TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+long LinuxParser::Jiffies() {
+  return LinuxParser::ActiveJiffies() + LinuxParser::IdleJiffies();
+}
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid [[maybe_unused]]) { return 0; }
 
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
+long LinuxParser::ActiveJiffies() {
+  // Calculate active jiffies according to:
+  // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+  std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
+  return std::stol(cpu_utilization[kUser_]) +
+         std::stol(cpu_utilization[kNice_]) +
+         std::stol(cpu_utilization[kSystem_]) +
+         std::stol(cpu_utilization[kIRQ_]) +
+         std::stol(cpu_utilization[kSoftIRQ_]) +
+         std::stol(cpu_utilization[kSteal_]);
+}
 
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
+long LinuxParser::IdleJiffies() {
+  // Calculate idle jiffies according to:
+  // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
 
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+  std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
+  return std::stol(cpu_utilization[kIdle_]) +
+         std::stol(cpu_utilization[kIOwait_]);
+}
+
+vector<string> LinuxParser::CpuUtilization() {
+  std::vector<string> cpu_utilization;
+  string line;
+  std::ifstream file_stream(kProcDirectory + kStatFilename);
+  if (file_stream.is_open()) {
+    getline(file_stream, line);
+    std::istringstream line_stream(line);
+    line_stream >> cpu_utilization[kUser_] >> cpu_utilization[kNice_] >>
+        cpu_utilization[kSystem_] >> cpu_utilization[kIdle_] >>
+        cpu_utilization[kIOwait_] >> cpu_utilization[kIRQ_] >>
+        cpu_utilization[kSoftIRQ_] >> cpu_utilization[kSteal_] >>
+        cpu_utilization[kGuest_] >> cpu_utilization[kGuestNice_];
+  }
+  return cpu_utilization;
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return 0; }
