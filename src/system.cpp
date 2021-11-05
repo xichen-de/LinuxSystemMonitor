@@ -55,11 +55,10 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() {
-  processes_.clear();
   vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
     auto process = Process(pid);
-    processes_.emplace_back(process);
+    processes_.push_back(process);
   }
   std::sort(processes_.begin(), processes_.end());
   return processes_;

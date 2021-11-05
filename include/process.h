@@ -54,7 +54,7 @@ class Process {
   bool operator<(Process const& a) const;
 
  private:
-  int pid;
+  int pid_;
 };
 
 #endif

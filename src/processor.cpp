@@ -43,13 +43,7 @@
 float Processor::Utilization() {
   // Calculate CPU utilization according to:
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
-  long previous_idle = LinuxParser::IdleJiffies();
-  long previous_total = LinuxParser::Jiffies();
   long idle = LinuxParser::IdleJiffies();
   long total = LinuxParser::Jiffies();
-  long delta_idle = idle - previous_idle;
-  long delta_total = total - previous_total;
-  std::this_thread::sleep_until(std::chrono::system_clock::now() +
-                                std::chrono::seconds(1));
-  return (float)delta_total - (float)delta_idle / (float)delta_total;
+  return (float)total - (float)idle / (float)total;
 }

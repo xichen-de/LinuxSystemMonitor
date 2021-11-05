@@ -43,22 +43,22 @@
 using std::string;
 using std::to_string;
 using std::vector;
-Process::Process(int pid) { this->pid = pid; }
+Process::Process(int pid) { pid_ = pid; }
 
-int Process::Pid() const { return this->pid; }
+int Process::Pid() const { return pid_; }
 
 float Process::CpuUtilization() const {
-  return (float)LinuxParser::ActiveJiffies(this->pid) /
+  return (float)LinuxParser::ActiveJiffies(pid_) /
          (float)LinuxParser::Jiffies();
 }
 
-string Process::Command() const { return LinuxParser::Command(this->pid); }
+string Process::Command() const { return LinuxParser::Command(pid_); }
 
-string Process::Ram() const { return LinuxParser::Ram(this->pid); }
+string Process::Ram() const { return LinuxParser::Ram(pid_); }
 
-string Process::User() const { return LinuxParser::User(this->pid); }
+string Process::User() const { return LinuxParser::User(pid_); }
 
-long int Process::UpTime() const { return LinuxParser::UpTime(this->pid); }
+long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 
 bool Process::operator<(Process const& a) const {
   return CpuUtilization() < a.CpuUtilization();
