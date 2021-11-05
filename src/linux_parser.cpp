@@ -173,27 +173,34 @@ vector<string> LinuxParser::ParseProcessStat(int pid) {
 long LinuxParser::ActiveJiffies() {
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
-  return std::stol(cpu_utilization[0]) + std::stol(cpu_utilization[1]) +
-         std::stol(cpu_utilization[2]) + std::stol(cpu_utilization[5]) +
-         std::stol(cpu_utilization[6]) + std::stol(cpu_utilization[7]);
+  return std::stol(cpu_utilization[kUser_]) +
+         std::stol(cpu_utilization[kNice_]) +
+         std::stol(cpu_utilization[kSystem_]) +
+         std::stol(cpu_utilization[kIRQ_]) +
+         std::stol(cpu_utilization[kSoftIRQ_]) +
+         std::stol(cpu_utilization[kSteal_]);
 }
 
 long LinuxParser::IdleJiffies() {
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
-  return std::stol(cpu_utilization[3]) + std::stol(cpu_utilization[4]);
+  return std::stol(cpu_utilization[kIdle_]) +
+         std::stol(cpu_utilization[kIOwait_]);
 }
 
 vector<string> LinuxParser::CpuUtilization() {
-  std::vector<string> cpu_utilization;
+  std::vector<string> cpu_utilization{10};
   string line;
   string token;
+  string cpu;
   std::ifstream file_stream(kProcDirectory + kStatFilename);
   if (file_stream.is_open()) {
     getline(file_stream, line);
     std::istringstream line_stream(line);
-    while (line_stream >> token) {
-      cpu_utilization.push_back(token);
-    }
+    line_stream >> cpu >> cpu_utilization[kUser_] >> cpu_utilization[kNice_] >>
+        cpu_utilization[kSystem_] >> cpu_utilization[kIdle_] >>
+        cpu_utilization[kIOwait_] >> cpu_utilization[kIRQ_] >>
+        cpu_utilization[kSoftIRQ_] >> cpu_utilization[kSteal_] >>
+        cpu_utilization[kGuest_] >> cpu_utilization[kGuestNice_];
   }
   return cpu_utilization;
 }
