@@ -41,9 +41,9 @@
 using std::string;
 
 string Format::ElapsedTime(long seconds) {
-  int hour = (int)seconds / 3600;
-  int minute = (int)(seconds % 3600) / 60;
-  int second = (int)seconds % 60;
+  int hour = seconds / 3600;
+  int minute = (seconds % 3600) / 60;
+  int second = seconds % 60;
   return std::to_string(hour) + ":" + std::to_string(minute) + ":" +
          std::to_string(second);
 }

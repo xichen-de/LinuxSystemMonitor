@@ -130,15 +130,14 @@ float LinuxParser::MemoryUtilization() {
 
 long LinuxParser::UpTime() {
   string line;
-  string up_time;
+  string up_time{"0"};
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream line_stream(line);
     line_stream >> up_time;
-    return std::stol(up_time);
   }
-  return 0;
+  return std::stol(up_time);
 }
 
 long LinuxParser::Jiffies() {
@@ -245,7 +244,6 @@ string LinuxParser::Command(int pid) {
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kCmdlineFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
-    return line;
   }
   return line;
 }
@@ -264,7 +262,7 @@ string LinuxParser::Ram(int pid) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream line_stream(line);
       while (line_stream >> key >> value) {
-        if (key == "VmSize") return value;
+        if (key == "VmSize") return std::to_string(std::stof(value) / 1000);
       }
     }
   }
