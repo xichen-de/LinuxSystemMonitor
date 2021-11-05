@@ -3,16 +3,16 @@
 // This project was submitted by Xi Chen as part of the Nanodegree At Udacity.
 //
 // As part of Udacity Honor code, your submissions must be your own work, hence
-// submitting this project as yours will cause you to break the Udacity Honor Code
-// and the suspension of your account.
+// submitting this project as yours will cause you to break the Udacity Honor
+// Code and the suspension of your account.
 //
-// Me, the author of the project, allow you to check the code as a reference, but if
-// you submit it, it's your own responsibility if you get expelled.
+// Me, the author of the project, allow you to check the code as a reference,
+// but if you submit it, it's your own responsibility if you get expelled.
 //
 // Copyright (c) 2021 Xi Chen
 //
-// Besides the above notice, the following license applies and this license notice
-// must be included in all works derived from this project.
+// Besides the above notice, the following license applies and this license
+// notice must be included in all works derived from this project.
 //
 // MIT License
 //
@@ -23,15 +23,16 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 #ifndef PROCESS_H
 #define PROCESS_H
@@ -43,16 +44,17 @@ It contains relevant attributes as shown below
 */
 class Process {
  public:
-  int Pid();                               // TODO: See src/process.cpp
-  std::string User();                      // TODO: See src/process.cpp
-  std::string Command();                   // TODO: See src/process.cpp
-  float CpuUtilization();                  // TODO: See src/process.cpp
-  std::string Ram();                       // TODO: See src/process.cpp
-  long int UpTime();                       // TODO: See src/process.cpp
-  bool operator<(Process const& a) const;  // TODO: See src/process.cpp
+  explicit Process(int pid);
+  [[nodiscard]] int Pid() const;
+  [[nodiscard]] std::string User() const;
+  [[nodiscard]] std::string Command() const;
+  [[nodiscard]] float CpuUtilization() const;
+  [[nodiscard]] std::string Ram() const;
+  [[nodiscard]] long int UpTime() const;
+  bool operator<(Process const& a) const;
 
-  // TODO: Declare any necessary private members
  private:
+  int pid;
 };
 
 #endif
