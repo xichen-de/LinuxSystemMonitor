@@ -130,15 +130,13 @@ float LinuxParser::MemoryUtilization() {
 
 long LinuxParser::UpTime() {
   string line;
-  string key;
-  string value;
-  string unit;
-  long up_time;
+  string up_time;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream line_stream(line);
     line_stream >> up_time;
+    return std::stol(up_time);
   }
   return 0;
 }
@@ -173,19 +171,16 @@ vector<string> LinuxParser::ParseProcessStat(int pid) {
 }
 
 long LinuxParser::ActiveJiffies() {
+  // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
-  return std::stol(cpu_utilization[kUser_]) +
-         std::stol(cpu_utilization[kNice_]) +
-         std::stol(cpu_utilization[kSystem_]) +
-         std::stol(cpu_utilization[kIRQ_]) +
-         std::stol(cpu_utilization[kSoftIRQ_]) +
-         std::stol(cpu_utilization[kSteal_]);
+  return std::stol(cpu_utilization[0]) + std::stol(cpu_utilization[1]) +
+         std::stol(cpu_utilization[2]) + std::stol(cpu_utilization[5]) +
+         std::stol(cpu_utilization[6]) + std::stol(cpu_utilization[7]);
 }
 
 long LinuxParser::IdleJiffies() {
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
-  return std::stol(cpu_utilization[kIdle_]) +
-         std::stol(cpu_utilization[kIOwait_]);
+  return std::stol(cpu_utilization[3]) + std::stol(cpu_utilization[4]);
 }
 
 vector<string> LinuxParser::CpuUtilization() {
