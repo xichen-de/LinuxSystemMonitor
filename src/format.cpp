@@ -40,8 +40,7 @@
 
 using std::string;
 
-string Format::ElapsedTime(long seconds [[maybe_unused]]) {
-  // Convert seconds to HH:MM:SS
+string Format::ElapsedTime(long seconds) {
   int hour = (int)seconds / 3600;
   int minute = (int)(seconds % 3600) / 60;
   int second = (int)seconds % 60;

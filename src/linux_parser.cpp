@@ -173,8 +173,6 @@ vector<string> LinuxParser::ParseProcessStat(int pid) {
 }
 
 long LinuxParser::ActiveJiffies() {
-  // Calculate active jiffies according to:
-  // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
   return std::stol(cpu_utilization[kUser_]) +
          std::stol(cpu_utilization[kNice_]) +

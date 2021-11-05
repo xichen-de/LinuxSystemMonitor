@@ -3,16 +3,16 @@
 // This project was submitted by Xi Chen as part of the Nanodegree At Udacity.
 //
 // As part of Udacity Honor code, your submissions must be your own work, hence
-// submitting this project as yours will cause you to break the Udacity Honor Code
-// and the suspension of your account.
+// submitting this project as yours will cause you to break the Udacity Honor
+// Code and the suspension of your account.
 //
-// Me, the author of the project, allow you to check the code as a reference, but if
-// you submit it, it's your own responsibility if you get expelled.
+// Me, the author of the project, allow you to check the code as a reference,
+// but if you submit it, it's your own responsibility if you get expelled.
 //
 // Copyright (c) 2021 Xi Chen
 //
-// Besides the above notice, the following license applies and this license notice
-// must be included in all works derived from this project.
+// Besides the above notice, the following license applies and this license
+// notice must be included in all works derived from this project.
 //
 // MIT License
 //
@@ -23,17 +23,33 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 #include "processor.h"
 
-// TODO: Return the aggregate CPU utilization
-float Processor::Utilization() { return 0.0; }
+#include <linux_parser.h>
+
+#include <thread>
+
+float Processor::Utilization() {
+  // Calculate CPU utilization according to:
+  // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+  long previous_idle = LinuxParser::IdleJiffies();
+  long previous_total = LinuxParser::Jiffies();
+  long idle = LinuxParser::IdleJiffies();
+  long total = LinuxParser::Jiffies();
+  long delta_idle = idle - previous_idle;
+  long delta_total = total - previous_total;
+  std::this_thread::sleep_until(std::chrono::system_clock::now() +
+                                std::chrono::seconds(1));
+  return (float)delta_total - (float)delta_idle / (float)delta_total;
+}
