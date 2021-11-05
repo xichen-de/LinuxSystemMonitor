@@ -219,6 +219,7 @@ int LinuxParser::TotalProcesses() {
       if (key == "processes") return std::stoi(value);
     }
   }
+  return 0;
 }
 
 int LinuxParser::RunningProcesses() {
@@ -234,6 +235,7 @@ int LinuxParser::RunningProcesses() {
       if (key == "procs_running") return std::stoi(value);
     }
   }
+  return 0;
 }
 
 string LinuxParser::Command(int pid) {
@@ -244,6 +246,7 @@ string LinuxParser::Command(int pid) {
     std::getline(stream, line);
     return line;
   }
+  return line;
 }
 
 string LinuxParser::Ram(int pid) {
@@ -263,6 +266,7 @@ string LinuxParser::Ram(int pid) {
       if (key == "VmSize") return value;
     }
   }
+  return value;
 }
 
 string LinuxParser::Uid(int pid) {
@@ -280,6 +284,7 @@ string LinuxParser::Uid(int pid) {
       }
     }
   }
+  return value;
 }
 
 string LinuxParser::User(int pid) {
@@ -300,6 +305,7 @@ string LinuxParser::User(int pid) {
       }
     }
   }
+  return username;
 }
 
 long LinuxParser::UpTime(int pid) {
