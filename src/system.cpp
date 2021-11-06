@@ -60,7 +60,7 @@ vector<Process>& System::Processes() {
     try {
       auto process = Process(pid);
       processes_.push_back(process);
-    } catch (std::exception& e) {
+    } catch (...) {
       // Do nothing
     }
   }
