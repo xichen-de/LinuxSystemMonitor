@@ -14,7 +14,13 @@ git clone https://github.com/xichen-de/LinuxSystemMonitor.git
 
 ## Ncurses
 
-This project uses ncurses. Install ncurses : `sudo apt install libncurses5-dev libncursesw5-dev`
+This project uses ncurses.
+
+[ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
+
+Within the Udacity Workspace, `.student_bashrc` automatically installs ncurses every time you launch the Workspace.
+
+If you are not using the Workspace, install ncurses within your own Linux environment: `sudo apt install libncurses5-dev libncursesw5-dev`
 
 ## Compiling
 
