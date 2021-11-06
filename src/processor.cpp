@@ -41,9 +41,8 @@
 #include <thread>
 
 float Processor::Utilization() {
-  // Calculate CPU utilization according to:
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   long idle = LinuxParser::IdleJiffies();
   long total = LinuxParser::Jiffies();
-  return (float)total - (float)idle / (float)total;
+  return (float)(total - idle) / (float)total;
 }

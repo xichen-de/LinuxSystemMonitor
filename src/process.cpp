@@ -48,8 +48,8 @@ Process::Process(int pid) { pid_ = pid; }
 int Process::Pid() const { return pid_; }
 
 float Process::CpuUtilization() const {
-  return (float)LinuxParser::ActiveJiffies(pid_) /
-         (float)LinuxParser::Jiffies();
+  // https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599
+  return (float)LinuxParser::ActiveJiffies(pid_) / (float)UpTime() * 100;
 }
 
 string Process::Command() const { return LinuxParser::Command(pid_); }

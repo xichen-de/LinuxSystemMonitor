@@ -36,8 +36,9 @@
 
 #include "format.h"
 
+#include <iomanip>
+#include <sstream>
 #include <string>
-
 using std::string;
 
 string Format::ElapsedTime(long seconds) {
@@ -46,4 +47,11 @@ string Format::ElapsedTime(long seconds) {
   int second = seconds % 60;
   return std::to_string(hour) + ":" + std::to_string(minute) + ":" +
          std::to_string(second);
+}
+
+std::string Format::SetPrecision(float number, int precision) {
+  // https://stackoverflow.com/questions/29200635/convert-float-to-string-with-precision-number-of-decimal-digits-specified
+  std::stringstream stream;
+  stream << std::fixed << std::setprecision(precision) << number;
+  return stream.str();
 }

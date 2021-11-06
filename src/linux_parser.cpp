@@ -42,6 +42,7 @@
 #include <string>
 #include <vector>
 
+#include "format.h"
 using std::stof;
 using std::string;
 using std::to_string;
@@ -249,7 +250,6 @@ string LinuxParser::Command(int pid) {
 }
 
 string LinuxParser::Ram(int pid) {
-  // Calculate the memory used by a process according to:
   // https://stackoverflow.com/questions/131303/how-can-i-measure-the-actual-memory-usage-of-an-application-or-process
   string line;
   string key;
@@ -259,10 +259,10 @@ string LinuxParser::Ram(int pid) {
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)) {
-      std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream line_stream(line);
       while (line_stream >> key >> value) {
-        if (key == "VmSize") return std::to_string(std::stof(value) / 1000);
+        if (key == "VmSize:")
+          return Format::SetPrecision(std::stof(value) / 1000, 2);
       }
     }
   }
@@ -270,6 +270,7 @@ string LinuxParser::Ram(int pid) {
 }
 
 string LinuxParser::Uid(int pid) {
+  // https://superuser.com/questions/479746/how-to-find-pids-user-name-in-linux/1361046
   string line;
   string key;
   string value;
@@ -301,10 +302,9 @@ string LinuxParser::User(int pid) {
     while (std::getline(file_stream, line)) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream line_stream(line);
-      while (line_stream >> username >> ignore >> token) {
-        if (token == uid) {
-          return username;
-        }
+      line_stream >> username >> ignore >> token;
+      if (token == uid) {
+        return username;
       }
     }
   }
@@ -312,7 +312,8 @@ string LinuxParser::User(int pid) {
 }
 
 long LinuxParser::UpTime(int pid) {
+  // https://superuser.com/questions/380520/how-to-find-uptime-of-a-linux-process/464413
   vector<string> process_utilization = ParseProcessStat(pid);
   long start_time = std::stol(process_utilization[21]);
-  return UpTime() - start_time;
+  return UpTime() - start_time / sysconf(_SC_CLK_TCK);
 }

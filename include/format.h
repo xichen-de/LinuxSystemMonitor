@@ -41,6 +41,7 @@
 
 namespace Format {
 std::string ElapsedTime(long times);
+std::string SetPrecision(float number, int precision);
 };  // namespace Format
 
 #endif
