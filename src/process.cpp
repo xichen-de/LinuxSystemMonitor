@@ -50,16 +50,18 @@ Process::Process(int pid) {
   user = LinuxParser::User(pid);
   uptime = LinuxParser::UpTime(pid);
   ram = LinuxParser::Ram(pid);
+  cpu_utilization = Process::CalculateCpuUtilization();
 }
 
 int Process::Pid() const { return pid_; }
 
-float Process::CpuUtilization() const {
+float Process::CalculateCpuUtilization() const {
   // https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599
   long active_time = LinuxParser::ActiveJiffies(pid_) / sysconf(_SC_CLK_TCK);
   long total_time = Process::UpTime();
   return (float)active_time / (float)total_time;
 }
+float Process::CpuUtilization() const { return cpu_utilization; }
 
 std::string Process::Command() const { return command; }
 
