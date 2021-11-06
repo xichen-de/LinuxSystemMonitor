@@ -89,6 +89,8 @@ std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
 std::vector<std::string> ParseProcessStat(int pid);
+long GetValueFromVectorWithDefaultZero(const std::vector<std::string>& vec,
+                                       int index);
 }
 
 #endif

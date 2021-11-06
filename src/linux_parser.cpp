@@ -154,11 +154,20 @@ long LinuxParser::ActiveJiffies(int pid) {
   // utime, stime, cutime, cstime are in clock ticks
   // clock per second: sysconf(_SC_CLK_TCK) (declared in the header unistd.h)
   vector<string> process_utilization = ParseProcessStat(pid);
-  long utime = std::stol(process_utilization[13]);
-  long stime = std::stol(process_utilization[14]);
-  long cutime = std::stol(process_utilization[15]);
-  long cstime = std::stol(process_utilization[16]);
+  long utime = GetValueFromVectorWithDefaultZero(process_utilization, 13);
+  long stime = GetValueFromVectorWithDefaultZero(process_utilization, 14);
+  long cutime = GetValueFromVectorWithDefaultZero(process_utilization, 15);
+  long cstime = GetValueFromVectorWithDefaultZero(process_utilization, 16);
   return utime + stime + cutime + cstime;
+}
+
+long LinuxParser::GetValueFromVectorWithDefaultZero(const vector<string>& vec,
+                                                    const int index) {
+  try {
+    return std::stol(vec[index]);
+  } catch (const std::out_of_range& oor) {
+    return 0;
+  }
 }
 vector<string> LinuxParser::ParseProcessStat(int pid) {
   string line;
