@@ -36,9 +36,12 @@
 
 #include "process.h"
 
+#include <dirent.h>
 #include <linux_parser.h>
+#include <unistd.h>
 
 #include <string>
+#include <vector>
 
 using std::string;
 using std::to_string;
@@ -49,7 +52,9 @@ int Process::Pid() const { return pid_; }
 
 float Process::CpuUtilization() const {
   // https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599
-  return (float)LinuxParser::ActiveJiffies(pid_) / (float)UpTime() * 100;
+  long active_time = LinuxParser::ActiveJiffies(pid_) / sysconf(_SC_CLK_TCK);
+  long total_time = Process::UpTime();
+  return (float)active_time / (float)total_time;
 }
 
 string Process::Command() const { return LinuxParser::Command(pid_); }

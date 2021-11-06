@@ -130,6 +130,10 @@ float LinuxParser::MemoryUtilization() {
 }
 
 long LinuxParser::UpTime() {
+  // https://man7.org/linux/man-pages/man5/proc.5.html
+  // This file contains two numbers (values in seconds): the
+  // uptime of the system (including time spent in suspend) and
+  // the amount of time spent in the idle process.
   string line;
   string up_time{"0"};
   std::ifstream stream(kProcDirectory + kUptimeFilename);
@@ -146,8 +150,9 @@ long LinuxParser::Jiffies() {
 }
 
 long LinuxParser::ActiveJiffies(int pid) {
-  // Calculate active jiffies of a process according to:
   // https://stackoverflow.com/questions/39066998/what-are-the-meaning-of-values-at-proc-pid-stat
+  // utime, stime, cutime, cstime are in clock ticks
+  // clock per second: sysconf(_SC_CLK_TCK) (declared in the header unistd.h)
   vector<string> process_utilization = ParseProcessStat(pid);
   long utime = std::stol(process_utilization[13]);
   long stime = std::stol(process_utilization[14]);
@@ -172,6 +177,7 @@ vector<string> LinuxParser::ParseProcessStat(int pid) {
 
 long LinuxParser::ActiveJiffies() {
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+  // expressed in USER_HZ sysconf(_SC_CLK_TCK)
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
   return std::stol(cpu_utilization[kUser_]) +
          std::stol(cpu_utilization[kNice_]) +
@@ -182,12 +188,16 @@ long LinuxParser::ActiveJiffies() {
 }
 
 long LinuxParser::IdleJiffies() {
+  // Expressed in USER_HZ sysconf(_SC_CLK_TCK)
   std::vector<string> cpu_utilization = LinuxParser::CpuUtilization();
   return std::stol(cpu_utilization[kIdle_]) +
          std::stol(cpu_utilization[kIOwait_]);
 }
 
 vector<string> LinuxParser::CpuUtilization() {
+  // The amount of time, measured in units of USER_HZ
+  //(1/100ths of a second on most architectures, use
+  // sysconf(_SC_CLK_TCK) to obtain the right value)
   std::vector<string> cpu_utilization{10};
   string line;
   string token;
@@ -253,7 +263,7 @@ string LinuxParser::Ram(int pid) {
   // https://stackoverflow.com/questions/131303/how-can-i-measure-the-actual-memory-usage-of-an-application-or-process
   string line;
   string key;
-  string value;
+  string value{"0"};
   string unit;
   std::vector<string> process_utilization;
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);
@@ -262,7 +272,8 @@ string LinuxParser::Ram(int pid) {
       std::istringstream line_stream(line);
       while (line_stream >> key >> value) {
         if (key == "VmSize:")
-          return Format::SetPrecision(std::stof(value) / 1000, 2);
+          return Format::SetPrecision(std::stof(value) / 1000, 0);
+        // return std::to_string(std::stof(value) / 1000);
       }
     }
   }
@@ -312,7 +323,11 @@ string LinuxParser::User(int pid) {
 }
 
 long LinuxParser::UpTime(int pid) {
-  // https://superuser.com/questions/380520/how-to-find-uptime-of-a-linux-process/464413
+  // The time the process started after system boot.  In
+  // kernels before Linux 2.6, this value was expressed
+  // in jiffies.  Since Linux 2.6, the value is
+  // expressed in clock ticks (divide by
+  // sysconf(_SC_CLK_TCK)).
   vector<string> process_utilization = ParseProcessStat(pid);
   long start_time = std::stol(process_utilization[21]);
   return UpTime() - start_time / sysconf(_SC_CLK_TCK);

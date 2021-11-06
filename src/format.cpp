@@ -42,11 +42,10 @@
 using std::string;
 
 string Format::ElapsedTime(long seconds) {
-  int hour = seconds / 3600;
-  int minute = (seconds % 3600) / 60;
-  int second = seconds % 60;
-  return std::to_string(hour) + ":" + std::to_string(minute) + ":" +
-         std::to_string(second);
+  long hour = seconds / 3600;
+  long minute = (seconds % 3600) / 60;
+  long second = seconds % 60;
+  return Padding(hour) + ":" + Padding(minute) + ":" + Padding(second);
 }
 
 std::string Format::SetPrecision(float number, int precision) {
@@ -54,4 +53,12 @@ std::string Format::SetPrecision(float number, int precision) {
   std::stringstream stream;
   stream << std::fixed << std::setprecision(precision) << number;
   return stream.str();
+}
+
+string Format::Padding(long number) {
+  if (number > 9) {
+    return std::to_string(number);
+  } else {
+    return "0" + std::to_string(number);
+  }
 }
