@@ -3,16 +3,16 @@
 // This project was submitted by Xi Chen as part of the Nanodegree At Udacity.
 //
 // As part of Udacity Honor code, your submissions must be your own work, hence
-// submitting this project as yours will cause you to break the Udacity Honor Code
-// and the suspension of your account.
+// submitting this project as yours will cause you to break the Udacity Honor
+// Code and the suspension of your account.
 //
-// Me, the author of the project, allow you to check the code as a reference, but if
-// you submit it, it's your own responsibility if you get expelled.
+// Me, the author of the project, allow you to check the code as a reference,
+// but if you submit it, it's your own responsibility if you get expelled.
 //
 // Copyright (c) 2021 Xi Chen
 //
-// Besides the above notice, the following license applies and this license notice
-// must be included in all works derived from this project.
+// Besides the above notice, the following license applies and this license
+// notice must be included in all works derived from this project.
 //
 // MIT License
 //
@@ -23,28 +23,28 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include "ncurses_display.h"
 
 #include <curses.h>
+
 #include <chrono>
 #include <string>
 #include <thread>
 #include <vector>
 
 #include "format.h"
-#include "ncurses_display.h"
 #include "system.h"
-
-using std::string;
-using std::to_string;
 
 // 50 bars uniformly displayed from 0 - 100 %
 // 2% is one bar(|)
@@ -57,9 +57,9 @@ std::string NCursesDisplay::ProgressBar(float percent) {
     result += i <= bars ? '|' : ' ';
   }
 
-  string display{to_string(percent * 100).substr(0, 4)};
+  std::string display{std::to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
-    display = " " + to_string(percent * 100).substr(0, 3);
+    display = " " + std::to_string(percent * 100).substr(0, 3);
   return result + " " + display + "/100%";
 }
 
@@ -77,11 +77,12 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   mvwprintw(window, row, 10, "");
   wprintw(window, ProgressBar(system.MemoryUtilization()).c_str());
   wattroff(window, COLOR_PAIR(1));
-  mvwprintw(window, ++row, 2,
-            ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
   mvwprintw(
       window, ++row, 2,
-      ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
+      ("Total Processes: " + std::to_string(system.TotalProcesses())).c_str());
+  mvwprintw(window, ++row, 2,
+            ("Running Processes: " + std::to_string(system.RunningProcesses()))
+                .c_str());
   mvwprintw(window, ++row, 2,
             ("Up Time: " + Format::ElapsedTime(system.UpTime())).c_str());
   wrefresh(window);
@@ -106,10 +107,12 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   wattroff(window, COLOR_PAIR(2));
   int const num_processes = int(processes.size()) > n ? n : processes.size();
   for (int i = 0; i < num_processes; ++i) {
-    mvwprintw(window, ++row, pid_column, to_string(processes[i].Pid()).c_str());
+    mvwprintw(window, ++row, pid_column,
+              std::to_string(processes[i].Pid()).c_str());
     mvwprintw(window, row, user_column, processes[i].User().c_str());
     float cpu = processes[i].CpuUtilization() * 100;
-    mvwprintw(window, row, cpu_column, to_string(cpu).substr(0, 4).c_str());
+    mvwprintw(window, row, cpu_column,
+              std::to_string(cpu).substr(0, 4).c_str());
     mvwprintw(window, row, ram_column, processes[i].Ram().c_str());
     mvwprintw(window, row, time_column,
               Format::ElapsedTime(processes[i].UpTime()).c_str());

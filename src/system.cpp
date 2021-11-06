@@ -38,18 +38,11 @@
 
 #include <linux_parser.h>
 
-#include <cstddef>
-#include <set>
 #include <string>
 #include <vector>
 
 #include "process.h"
 #include "processor.h"
-
-using std::set;
-using std::size_t;
-using std::string;
-using std::vector;
 
 System::System() {
   kernel_ = LinuxParser::Kernel();
@@ -57,9 +50,9 @@ System::System() {
 }
 Processor& System::Cpu() { return cpu_; }
 
-vector<Process>& System::Processes() {
+std::vector<Process>& System::Processes() {
   processes_.clear();
-  vector<int> pids = LinuxParser::Pids();
+  std::vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
     try {
       auto process = Process(pid);

@@ -40,10 +40,7 @@
 #include <unistd.h>
 
 #include <string>
-#include <vector>
 
-using std::to_string;
-using std::vector;
 Process::Process(int pid) {
   pid_ = pid;
   command = LinuxParser::Command(pid);

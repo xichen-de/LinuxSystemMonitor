@@ -37,18 +37,16 @@
 #include "format.h"
 
 #include <iomanip>
-#include <sstream>
 #include <string>
-using std::string;
 
-string Format::ElapsedTime(long seconds) {
+std::string Format::ElapsedTime(long seconds) {
   long hour = seconds / 3600;
   long minute = (seconds % 3600) / 60;
   long second = seconds % 60;
   return Padding(hour) + ":" + Padding(minute) + ":" + Padding(second);
 }
 
-string Format::Padding(long number) {
+std::string Format::Padding(long number) {
   // https://stackoverflow.com/questions/1714515/how-can-i-pad-an-int-with-leading-zeros-when-using-cout-operator
   std::stringstream stream;
   stream << std::setfill('0') << std::setw(2) << number;
