@@ -57,8 +57,12 @@ vector<Process>& System::Processes() {
   processes_.clear();
   vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
-    auto process = Process(pid);
-    processes_.push_back(process);
+    try {
+      auto process = Process(pid);
+      processes_.push_back(process);
+    } catch (std::exception& e) {
+      // Do nothing
+    }
   }
   std::sort(processes_.rbegin(), processes_.rend());
   return processes_;
