@@ -51,24 +51,32 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+System::System() {
+  kernel_ = LinuxParser::Kernel();
+  os_ = LinuxParser::OperatingSystem();
+}
 Processor& System::Cpu() { return cpu_; }
 
 vector<Process>& System::Processes() {
   processes_.clear();
   vector<int> pids = LinuxParser::Pids();
   for (int pid : pids) {
-    auto process = Process(pid);
-    processes_.push_back(process);
+    try {
+      auto process = Process(pid);
+      processes_.push_back(process);
+    } catch (std::exception& e) {
+      // Do nothing
+    }
   }
   std::sort(processes_.rbegin(), processes_.rend());
   return processes_;
 }
 
-std::string System::Kernel() { return LinuxParser::Kernel(); }
+std::string System::Kernel() { return kernel_; }
 
 float System::MemoryUtilization() { return LinuxParser::MemoryUtilization(); }
 
-std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }
+std::string System::OperatingSystem() { return os_; }
 
 int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 

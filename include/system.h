@@ -45,6 +45,7 @@
 
 class System {
  public:
+  System();
   Processor& Cpu();
   std::vector<Process>& Processes();
   float MemoryUtilization();
@@ -57,6 +58,8 @@ class System {
  private:
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
+  std::string kernel_;
+  std::string os_;
 };
 
 #endif
