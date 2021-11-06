@@ -53,6 +53,7 @@ class Process {
   [[nodiscard]] long int UpTime() const;
   bool operator<(Process const& a) const;
 
+
  private:
   int pid_;
 };
