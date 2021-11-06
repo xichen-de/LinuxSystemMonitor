@@ -37,7 +37,6 @@
 #include "system.h"
 
 #include <linux_parser.h>
-#include <unistd.h>
 
 #include <cstddef>
 #include <set>

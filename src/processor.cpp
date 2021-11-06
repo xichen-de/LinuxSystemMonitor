@@ -38,8 +38,6 @@
 
 #include <linux_parser.h>
 
-#include <thread>
-
 float Processor::Utilization() {
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   long idle = LinuxParser::IdleJiffies();

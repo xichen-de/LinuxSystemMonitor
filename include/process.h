@@ -45,17 +45,20 @@ It contains relevant attributes as shown below
 class Process {
  public:
   explicit Process(int pid);
-  [[nodiscard]] int Pid() const;
-  [[nodiscard]] std::string User() const;
-  [[nodiscard]] std::string Command() const;
-  [[nodiscard]] float CpuUtilization() const;
-  [[nodiscard]] std::string Ram() const;
-  [[nodiscard]] long int UpTime() const;
+  int Pid() const;
+  std::string User() const;
+  std::string Command() const;
+  float CpuUtilization() const;
+  std::string Ram() const;
+  long int UpTime() const;
   bool operator<(Process const& a) const;
-
 
  private:
   int pid_;
+  std::string command;
+  std::string user;
+  long uptime;
+  std::string ram;
 };
 
 #endif

@@ -43,6 +43,6 @@ namespace Format {
 std::string ElapsedTime(long times);
 std::string SetPrecision(float number, int precision);
 std::string Padding(long number);
-};  // namespace Format
+}  // namespace Format
 
 #endif

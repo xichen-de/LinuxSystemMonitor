@@ -273,7 +273,6 @@ string LinuxParser::Ram(int pid) {
       while (line_stream >> key >> value) {
         if (key == "VmSize:")
           return Format::SetPrecision(std::stof(value) / 1000, 0);
-        // return std::to_string(std::stof(value) / 1000);
       }
     }
   }
@@ -292,7 +291,7 @@ string LinuxParser::Uid(int pid) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream line_stream(line);
       while (line_stream >> key >> value) {
-        if (key == "Uid:") {
+        if (key == "Uid") {
           return value;
         }
       }

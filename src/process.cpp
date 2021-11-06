@@ -36,17 +36,21 @@
 
 #include "process.h"
 
-#include <dirent.h>
 #include <linux_parser.h>
 #include <unistd.h>
 
 #include <string>
 #include <vector>
 
-using std::string;
 using std::to_string;
 using std::vector;
-Process::Process(int pid) { pid_ = pid; }
+Process::Process(int pid) {
+  pid_ = pid;
+  command = LinuxParser::Command(pid);
+  user = LinuxParser::User(pid);
+  uptime = LinuxParser::UpTime(pid);
+  ram = LinuxParser::Ram(pid);
+}
 
 int Process::Pid() const { return pid_; }
 
@@ -57,15 +61,14 @@ float Process::CpuUtilization() const {
   return (float)active_time / (float)total_time;
 }
 
-string Process::Command() const { return LinuxParser::Command(pid_); }
+std::string Process::Command() const { return command; }
 
-string Process::Ram() const { return LinuxParser::Ram(pid_); }
+std::string Process::Ram() const { return ram; }
 
-string Process::User() const { return LinuxParser::User(pid_); }
+std::string Process::User() const { return user; }
 
-long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
+long int Process::UpTime() const { return uptime; }
 
 bool Process::operator<(Process const& a) const {
   return CpuUtilization() < a.CpuUtilization();
 }
-
