@@ -48,17 +48,9 @@ string Format::ElapsedTime(long seconds) {
   return Padding(hour) + ":" + Padding(minute) + ":" + Padding(second);
 }
 
-std::string Format::SetPrecision(float number, int precision) {
-  // https://stackoverflow.com/questions/29200635/convert-float-to-string-with-precision-number-of-decimal-digits-specified
-  std::stringstream stream;
-  stream << std::fixed << std::setprecision(precision) << number;
-  return stream.str();
-}
-
 string Format::Padding(long number) {
-  if (number > 9) {
-    return std::to_string(number);
-  } else {
-    return "0" + std::to_string(number);
-  }
+  // https://stackoverflow.com/questions/1714515/how-can-i-pad-an-int-with-leading-zeros-when-using-cout-operator
+  std::stringstream stream;
+  stream << std::setfill('0') << std::setw(2) << number;
+  return stream.str();
 }

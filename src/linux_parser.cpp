@@ -271,8 +271,7 @@ string LinuxParser::Ram(int pid) {
     while (std::getline(stream, line)) {
       std::istringstream line_stream(line);
       while (line_stream >> key >> value) {
-        if (key == "VmSize:")
-          return Format::SetPrecision(std::stof(value) / 1000, 0);
+        if (key == "VmSize:") return std::to_string(std::stoi(value) / 1000);
       }
     }
   }
