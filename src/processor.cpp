@@ -40,7 +40,7 @@
 
 float Processor::Utilization() {
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
-  long idle = LinuxParser::IdleJiffies();
-  long total = LinuxParser::Jiffies();
-  return (float)(total - idle) / (float)total;
+  const long idle = LinuxParser::IdleJiffies();
+  const long total = LinuxParser::Jiffies();
+  return static_cast<float>(total - idle) / total;
 }

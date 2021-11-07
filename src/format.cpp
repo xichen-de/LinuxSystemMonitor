@@ -40,9 +40,9 @@
 #include <string>
 
 std::string Format::ElapsedTime(long seconds) {
-  long hour = seconds / 3600;
-  long minute = (seconds % 3600) / 60;
-  long second = seconds % 60;
+  const long hour = seconds / 3600;
+  const long minute = (seconds % 3600) / 60;
+  const long second = seconds % 60;
   return Padding(hour) + ":" + Padding(minute) + ":" + Padding(second);
 }
 
