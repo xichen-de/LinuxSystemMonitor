@@ -12,15 +12,12 @@ git clone https://github.com/xichen-de/LinuxSystemMonitor.git
 
 ## Compiling and Running	
 
-## Ncurses
+## Dependencies
 
-This project uses ncurses. [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. Install ncurses:
-
-```
-sudo apt install libncurses5-dev libncursesw5-dev
-```
-
-
+* cmake >= 3.11
+* make >= 4.1
+* gcc/g++ >= 5.4
+* [ncurses](https://www.gnu.org/software/ncurses/) 
 
 ## Compiling
 
