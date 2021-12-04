@@ -1,0 +1,16 @@
+name: C++ CI
+
+on: [ push, pull_request ]
+
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: Build base image
+        run: |
+          docker build -t project-dev -f ci/docker/ubuntu/Dockerfile .
+      - name: Build project with cmake and test.
+        run: |
+          docker run --rm -v $(pwd):/usr/src/project project-dev bash -c "cd /usr/src/project && bash build_and_test.sh"
