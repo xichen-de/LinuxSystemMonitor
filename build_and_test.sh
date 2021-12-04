@@ -51,4 +51,3 @@ mkdir build
 cd build
 cmake ..
 make
-./monitor

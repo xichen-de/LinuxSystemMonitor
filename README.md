@@ -1,5 +1,7 @@
 # Linux System Monitor
 
+![CI](https://github.com/xichen-de/LinuxSystemMonitor/actions/workflows/docker.yml/badge.svg)
+
 This is a command line system monitor tool for Linux, similar to `htop`.
 
 ![image-20211106182734273](README.assets/example.png)
