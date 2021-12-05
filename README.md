@@ -1,27 +1,30 @@
 # Linux System Monitor
 
+## Description
 ![CI](https://github.com/xichen-de/LinuxSystemMonitor/actions/workflows/docker.yml/badge.svg)
 
-This is a command line system monitor tool for Linux, similar to `htop`.
+This is a command line system monitor program for Linux, similar to `htop`. This tool reads data from the Linux file system and calculates CPU load, memory usage, process information and displays it in the CLI. It also provides information about the system, kernel and uptime.
+
+Built and tested on Ubuntu 20.04.
 
 ![image-20211106182734273](README.assets/example.png)
 
-## Cloning
+## Usage
+
+### Cloning
 
 ```
 git clone https://github.com/xichen-de/LinuxSystemMonitor.git
 ```
 
-## Compiling and Running	
-
-## Dependencies
+### Install dependencies
 
 * cmake >= 3.11
 * make >= 4.1
 * gcc/g++ >= 5.4
 * [ncurses](https://www.gnu.org/software/ncurses/) 
 
-## Compiling
+### Compiling
 
 To compile the project, first, create a `build` directory and change to that directory:
 
