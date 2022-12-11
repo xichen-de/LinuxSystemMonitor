@@ -33,8 +33,7 @@ std::string Format::ElapsedTime(long seconds) {
 }
 
 std::string Format::Padding(long number) {
-  // https://stackoverflow.com/questions/1714515/how-can-i-pad-an-int-with-leading-zeros-when-using-cout-operator
   std::stringstream stream;
-  stream << std::setfill('0') << std::setw(2) << number;
+  stream << std::setw(2) << std::setfill('0') << number;
   return stream.str();
 }
